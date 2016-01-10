@@ -1,11 +1,14 @@
 #include "SlateTutorials.h"
 #include "MainMenuHUD.h"
 #include "MainMenuUI.h"
+#include "MenuStyles.h"
+#include "GlobalMenuStyle.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SMainMenuUI::Construct(const FArguments& InArgs)
 {
 	MainMenuHUD = InArgs._MainMenuHUD;
+	MenuStyle = &FMenuStyles::Get()->GetWidgetStyle<FGlobalStyle>(TEXT("Global"));
 
 	ChildSlot
 		[
@@ -15,9 +18,7 @@ void SMainMenuUI::Construct(const FArguments& InArgs)
 			.VAlign(VAlign_Top)
 			[
 				SNew(STextBlock)
-				.ColorAndOpacity(FLinearColor::White)
-				.ShadowColorAndOpacity(FLinearColor::Black)
-				.Font(FSlateFontInfo("Arial", 26))
+				.TextStyle(&MenuStyle->MenuTitleStyle)
 				.Text(FText::FromString(TEXT("Main Menu")))
 			]
 			+SOverlay::Slot()
@@ -28,12 +29,16 @@ void SMainMenuUI::Construct(const FArguments& InArgs)
 				+SVerticalBox::Slot()
 				[
 					SNew(SButton)
+					.ButtonStyle(&MenuStyle->MenuButtonStyle)
+					.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					.Text(FText::FromString(TEXT("Play Game!")))
 					.OnClicked(this, &SMainMenuUI::PlayGameClicked)
 				]
 				+SVerticalBox::Slot()
 				[
 					SNew(SButton)
+					.ButtonStyle(&MenuStyle->MenuButtonStyle)
+					.TextStyle(&MenuStyle->MenuButtonTextStyle)
 					.Text(FText::FromString(TEXT("Quit Game!")))
 					.OnClicked(this, &SMainMenuUI::QuitGameClicked)
 				]
